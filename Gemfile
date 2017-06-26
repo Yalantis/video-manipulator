@@ -8,7 +8,7 @@ end
 # Data Storage
 gem 'mongoid', '~> 6.1.0'
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
-gem 'carrierwave_backgrounder'
+gem 'carrierwave_backgrounder', github: 'lardawge/carrierwave_backgrounder'
 gem 'kaminari-mongoid', '~> 0.1.0'
 
 # Background jobs

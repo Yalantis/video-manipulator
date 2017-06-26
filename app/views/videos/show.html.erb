@@ -7,12 +7,12 @@
 
 <p>
   <strong>File:</strong>
-  <%= video_tag(@video.file.url) %>
+  <%= video_tag @video.file.url, :controls => true %>
 </p>
 
 <p>
   <strong>File processing:</strong>
-  <%= @video.file_processing %>
+  <%= @video.file_processing? ? "Yes" : "No" %>
 </p>
 
 <p>

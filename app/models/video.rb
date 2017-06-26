@@ -5,10 +5,11 @@ class Video
   field :title, type: String
   field :file, type: String
   field :file_tmp, type: String
-  field :file_processing, type: String
+  field :file_processing, type: Boolean
   field :file_duration, type: Integer
 
   mount_uploader :file, ::VideoUploader
+  process_in_background :file, ::ProcessVideoJob
   validates_presence_of :file
 
 end
