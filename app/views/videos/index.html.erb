@@ -7,8 +7,8 @@
     <tr>
       <th>Title</th>
       <th>File</th>
-      <th>File tmp</th>
-      <th>File processing</th>
+      <th>Progress</th>
+      <th>Processing</th>
       <th>Duration</th>
       <th colspan="3"></th>
     </tr>
@@ -19,6 +19,7 @@
       <tr>
         <td><%= video.title %></td>
         <td><%= image_tag(video.file.url(:thumb)) if video.file.url(:thumb).present? %></td>
+        <td><%= (video.progress.to_f * 100).round %>%</td>
         <td><%= video.file_processing? ? "Yes" : "No" %></td>
         <td><%= video.file_duration %></td>
         <td><%= link_to 'Show', video %></td>

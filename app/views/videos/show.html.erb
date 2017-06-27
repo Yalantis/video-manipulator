@@ -18,6 +18,16 @@
 </p>
 
 <p>
+  <strong>Apply Sepia Effect:</strong>
+  <%= @video.apply_sepia_effect? ? "Yes" : "No" %>
+</p>
+
+<p>
+  <strong>File processing progress:</strong>
+  <%= (@video.progress.to_f * 100).round %>%
+</p>
+
+<p>
   <strong>File processing:</strong>
   <%= @video.file_processing? ? "Yes" : "No" %>
 </p>

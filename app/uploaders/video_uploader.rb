@@ -8,20 +8,31 @@ class VideoUploader < CarrierWave::Uploader::Base
     %w(mov mp4 3gp mkv webm m4v avi)
   end
 
-  version :processed do
-    encode_video :mp4,
-     resolution:           '500x400',
-     video_codec:          'libx264',
-     reference_frames:     '4',
-     constant_rate_factor: '30',
-     frame_rate:           '25',
-     x264_vprofile:        'baseline',
-     x264_vprofile_level:  '3',
-     audio_codec:          'aac',
-     audio_bitrate:        '64k',
-     audio_sample_rate:    '44100',
-     audio_channels:       '1',
-     strict:               true
+  PROCESSED_DEFAULTS = {
+    resolution:           '500x400',
+    video_codec:          'libx264',
+    reference_frames:     '4',
+    constant_rate_factor: '30',
+    frame_rate:           '25',
+    x264_vprofile_level:  '3',
+    audio_codec:          'aac',
+    audio_bitrate:        '64k',
+    audio_sample_rate:    '44100',
+    audio_channels:       '1',
+    strict:               true,
+    progress: :processing_progress
+  }
+
+  version :processed do |model|
+    process encode: [:mp4, PROCESSED_DEFAULTS]
+  end
+
+  def encode(format, opts={})
+    encode_video(format, opts) do |_, params|
+      if model.apply_sepia_effect
+        params[:custom] = %w(-filter_complex colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131 -c:a copy)
+      end
+    end
   end
 
   version :thumb do
