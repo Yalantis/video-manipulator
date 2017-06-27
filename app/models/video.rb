@@ -9,7 +9,8 @@ class Video
   field :file_duration, type: Integer
 
   mount_uploader :file, ::VideoUploader
-  process_in_background :file, ::ProcessVideoJob
+  process_in_background :file
+  store_in_background :file
   validates_presence_of :file
 
 end

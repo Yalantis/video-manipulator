@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Videos</h1>
+<h1 class="header center orange-text">Videos</h1>
 
 <table>
   <thead>
@@ -18,7 +18,7 @@
     <% @videos.each do |video| %>
       <tr>
         <td><%= video.title %></td>
-        <td><%= video.file.url %></td>
+        <td><%= image_tag(video.file.url(:thumb)) if video.file.url(:thumb).present? %></td>
         <td><%= video.file_processing? ? "Yes" : "No" %></td>
         <td><%= video.file_duration %></td>
         <td><%= link_to 'Show', video %></td>
@@ -31,4 +31,4 @@
 
 <br>
 
-<%= link_to 'New Video', new_video_path %>
+<%= link_to 'New Video', new_video_path, class: "waves-effect waves-light btn" %>

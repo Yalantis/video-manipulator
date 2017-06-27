@@ -10,7 +10,7 @@ class VideoUploader < CarrierWave::Uploader::Base
   version :thumb do
     process thumbnail: [
       {
-        resolution: '320x320',
+        resolution: '200x200',
         preserve_aspect_ratio: :width,
         quality: 1,
         format: "png"

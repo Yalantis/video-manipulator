@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>VideoManipulator</title>
+    <title>Video Manipulator</title>
     <%= csrf_meta_tags %>
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="light-blue lighten-1" role="navigation">
+      <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Video Manipulator</a>
+        <ul class="right hide-on-med-and-down">
+          <li><%= link_to "Videos", videos_path %></li>
+        </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+          <li><%= link_to "Videos", videos_path %></li>
+        </ul>
+        <a href="/" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      </div>
+    </nav>
+    <div class="section no-pad-bot" id="index-banner">
+      <div class="container">
+        <div class="row">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

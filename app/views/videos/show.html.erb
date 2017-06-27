@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<h1 class="header center orange-text">Video <%= @video.id %></h1>
+
 <p>
   <strong>Title:</strong>
   <%= @video.title %>
@@ -7,7 +9,7 @@
 
 <p>
   <strong>File:</strong>
-  <%= video_tag @video.file.url, :controls => true %>
+  <%= video_tag(@video.file.url, controls: true) if @video.file.url.present? %>
 </p>
 
 <p>
