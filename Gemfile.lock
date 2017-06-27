@@ -1,10 +1,26 @@
 GIT
-  remote: https://github.com/lardawge/carrierwave_backgrounder.git
-  revision: 460394b0e2c0cf0c192be9c1a60bcf9dfb1f9e4d
+  remote: https://github.com/23shortstop/carrierwave-video-thumbnailer.git
+  revision: 2f897f73239dcbbe65513090b66a47a752a3592f
+  specs:
+    carrierwave-video-thumbnailer (0.1.4)
+      carrierwave
+      mini_magick
+
+GIT
+  remote: https://github.com/23shortstop/carrierwave_backgrounder.git
+  revision: b616ef10493c3913670485c5e15044f5d4e031a1
   specs:
     carrierwave_backgrounder (0.4.2)
-      carrierwave (>= 0.5, < 2.0)
-      mime-types (~> 2.99)
+      carrierwave (~> 1.0)
+      mime-types (~> 2.3)
+
+GIT
+  remote: https://github.com/evgeniy-trebin/carrierwave-video.git
+  revision: 06238933c2b9ce05387dd686cead6e5696f19d44
+  specs:
+    carrierwave-video (0.5.7)
+      carrierwave
+      streamio-ffmpeg
 
 GEM
   remote: https://rubygems.org/
@@ -51,16 +67,13 @@ GEM
     bson (4.2.1)
     builder (3.2.3)
     byebug (9.0.6)
-    carrierwave (0.11.2)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
-      json (>= 1.7)
+    carrierwave (1.1.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-      mimemagic (>= 0.3.0)
-    carrierwave-mongoid (0.10.0)
-      carrierwave (>= 0.8.0, < 0.12.0)
-      mongoid (>= 3.0, < 7.0)
-      mongoid-grid_fs (>= 1.3, < 3.0)
+    carrierwave-mongoid (0.1.0)
+      carrierwave
+      mongoid
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -83,7 +96,6 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (2.1.0)
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.0.1)
@@ -109,7 +121,7 @@ GEM
       sass (~> 3.3)
     method_source (0.8.2)
     mime-types (2.99.3)
-    mimemagic (0.3.2)
+    mini_magick (4.7.2)
     mini_portile2 (2.2.0)
     minitest (5.10.2)
     mongo (2.4.2)
@@ -117,9 +129,6 @@ GEM
     mongoid (6.1.1)
       activemodel (~> 5.0)
       mongo (>= 2.4.1, < 3.0.0)
-    mongoid-grid_fs (2.3.0)
-      mime-types (>= 1.0, < 4.0)
-      mongoid (>= 3.0, < 7.0)
     multi_json (1.12.1)
     nio4r (2.1.0)
     nokogiri (1.8.0)
@@ -209,6 +218,8 @@ PLATFORMS
 DEPENDENCIES
   byebug
   carrierwave-mongoid
+  carrierwave-video!
+  carrierwave-video-thumbnailer!
   carrierwave_backgrounder!
   coffee-rails (~> 4.2)
   jbuilder (~> 2.5)

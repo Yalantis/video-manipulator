@@ -5,17 +5,21 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-# Data Storage
-gem 'mongoid', '~> 6.1.0'
-gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
-gem 'carrierwave_backgrounder', github: 'lardawge/carrierwave_backgrounder'
-gem 'kaminari-mongoid', '~> 0.1.0'
-
-# Background jobs
-gem 'sidekiq'
 
 # Video Processing
 gem 'streamio-ffmpeg'
+gem 'carrierwave-video', github: 'evgeniy-trebin/carrierwave-video'
+gem 'carrierwave-video-thumbnailer',
+  github: '23shortstop/carrierwave-video-thumbnailer'
+gem 'carrierwave_backgrounder', github: '23shortstop/carrierwave_backgrounder'
+gem 'kaminari-mongoid', '~> 0.1.0'
+
+# Data Storage (Order matters here. It should be required after carrierwave-video)
+gem 'mongoid', '~> 6.1.0'
+gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
+
+# Background jobs
+gem 'sidekiq'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.3'

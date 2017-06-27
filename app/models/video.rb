@@ -13,4 +13,6 @@ class Video
   store_in_background :file
   validates_presence_of :file
 
+  validates :title, presence: true
+
 end

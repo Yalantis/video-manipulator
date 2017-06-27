@@ -2,9 +2,26 @@ class VideoUploader < CarrierWave::Uploader::Base
   include ::CarrierWave::Backgrounder::Delay
   include ::CarrierWave::Extensions::VideoDuration
   include ::CarrierWave::Extensions::VideoThumbnailer
+  include ::CarrierWave::Video
 
-  def extension_white_list
-    %w(mp4)
+  def extension_whitelist
+    %w(mov mp4 3gp mkv webm m4v avi)
+  end
+
+  version :processed do
+    encode_video :mp4,
+     resolution:           '500x400',
+     video_codec:          'libx264',
+     reference_frames:     '4',
+     constant_rate_factor: '30',
+     frame_rate:           '25',
+     x264_vprofile:        'baseline',
+     x264_vprofile_level:  '3',
+     audio_codec:          'aac',
+     audio_bitrate:        '64k',
+     audio_sample_rate:    '44100',
+     audio_channels:       '1',
+     strict:               true
   end
 
   version :thumb do

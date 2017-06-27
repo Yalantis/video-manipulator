@@ -8,8 +8,13 @@
 </p>
 
 <p>
-  <strong>File:</strong>
+  <strong>Original Video File:</strong>
   <%= video_tag(@video.file.url, controls: true) if @video.file.url.present? %>
+</p>
+
+<p>
+  <strong>Resized and Converted Video File:</strong>
+  <%= video_tag(@video.file.url(:processed), controls: true) if @video.file.url(:processed).present? %>
 </p>
 
 <p>
