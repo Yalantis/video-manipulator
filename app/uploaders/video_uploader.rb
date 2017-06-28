@@ -8,6 +8,10 @@ class VideoUploader < CarrierWave::Uploader::Base
     %w(mov mp4 3gp mkv webm m4v avi)
   end
 
+  def store_dir
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+  end
+
   PROCESSED_DEFAULTS = {
     resolution:           '500x400',
     # video_codec:          'libx264',
@@ -23,27 +27,31 @@ class VideoUploader < CarrierWave::Uploader::Base
     progress: :processing_progress
   }.freeze
 
-  SEPIA_EFFECT_PARAMS =
-    %w(-filter_complex colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131 -c:a copy).freeze
-  BLACK_AND_WHITE_EFFECT_PARAMS =
-    %w(-vf hue=s=0 -c:a copy).freeze
+  EFFECT_PARAMS = {
+    sepia:
+      %w(-filter_complex colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131 -c:a copy),
+    black_and_white: %w(-vf hue=s=0 -c:a copy),
+    vertigo: %w(-vf frei0r=vertigo:0.2),
+    vignette: %w(-vf frei0r=vignette),
+    sobel: %w(-vf frei0r=sobel),
+    pixelizor: %w(-vf frei0r=pixeliz0r),
+    invertor: %w(-vf frei0r=invert0r),
+    rgbnoise: %w(-vf frei0r=rgbnoise:0.2)
+  }.freeze
 
   process encode: [:mp4, PROCESSED_DEFAULTS]
 
   def encode(format, opts={})
     encode_video(format, opts) do |_, params|
       params[:custom] ||= []
-      case model.effect
-      when 'sepia'
-        params[:custom] += SEPIA_EFFECT_PARAMS
-      when 'black_and_white'
-        params[:custom] += BLACK_AND_WHITE_EFFECT_PARAMS
-      when 'no_effect'
+      if model.effect == 'no_effect'
         # Watermark is not compatilble with above filters
         if model.watermark_image.path.present?
           params[:watermark] ||= {}
           params[:watermark][:path] = model.watermark_image.path
         end
+      else
+        params[:custom] = EFFECT_PARAMS[model.effect.to_sym]
       end
     end
   end
@@ -55,6 +63,10 @@ class VideoUploader < CarrierWave::Uploader::Base
 
     def full_filename(for_file)
       png_name for_file, version_name
+    end
+
+    def full_filename(for_file)
+      %(#{version_name}_#{for_file.chomp(File.extname(for_file))}.jpg)
     end
 
     # INFO Solution details

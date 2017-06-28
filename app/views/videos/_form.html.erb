@@ -31,13 +31,14 @@
   </div>
 
   <div class="row">
+    <span>Effects</span>
     <div class="input-field">
-      <%= f.radio_button :effect, 'no_effect', id: 'no_effect', checked: true %>
-      <%= f.label :no_effect, for: 'no_effect' %>
-      <%= f.radio_button :effect,'sepia', id: 'sepia_effect' %>
-      <%= f.label :sepia, for: 'sepia_effect' %>
-      <%= f.radio_button :effect, 'black_and_white', id: 'black_and_white_effect' %>
-      <%= f.label :black_and_white, for: 'black_and_white_effect' %>
+      <% Video::ALLOWED_EFFECTS.each_with_index do |effect, index| %>
+        <p>
+          <%= f.radio_button :effect, effect, id: effect, checked: index.zero? %>
+          <%= f.label effect, for: effect %>
+        </p>
+      <% end %>
     </div>
   </div>
 
