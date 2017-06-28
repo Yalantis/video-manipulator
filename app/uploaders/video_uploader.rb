@@ -30,15 +30,20 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   process encode: [:mp4, PROCESSED_DEFAULTS]
 
-
   def encode(format, opts={})
     encode_video(format, opts) do |_, params|
       params[:custom] ||= []
       case model.effect
-      when "sepia"
+      when 'sepia'
         params[:custom] += SEPIA_EFFECT_PARAMS
-      when "black_and_white"
+      when 'black_and_white'
         params[:custom] += BLACK_AND_WHITE_EFFECT_PARAMS
+      when 'no_effect'
+        # Watermark is not compatilble with above filters
+        if model.watermark_image.path.present?
+          params[:watermark] ||= {}
+          params[:watermark][:path] = model.watermark_image.path
+        end
       end
     end
   end

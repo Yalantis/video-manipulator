@@ -4,7 +4,6 @@ class Video
   include GlobalID::Identification
 
   field :title, type: String
-  field :file, type: String
   field :file_tmp, type: String
   field :file_processing, type: Boolean
   field :file_duration, type: Integer
@@ -16,6 +15,8 @@ class Video
   process_in_background :file
   store_in_background :file
   validates_presence_of :file
+
+  mount_uploader :watermark_image, ::ImageUploader
 
   validates :title, presence: true
 
