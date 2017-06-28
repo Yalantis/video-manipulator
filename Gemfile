@@ -10,7 +10,7 @@ end
 gem 'streamio-ffmpeg'
 gem 'carrierwave-video', github: 'evgeniy-trebin/carrierwave-video'
 gem 'carrierwave-video-thumbnailer',
-  github: '23shortstop/carrierwave-video-thumbnailer'
+    github: '23shortstop/carrierwave-video-thumbnailer'
 gem 'carrierwave_backgrounder', github: '23shortstop/carrierwave_backgrounder'
 gem 'kaminari-mongoid', '~> 0.1.0'
 

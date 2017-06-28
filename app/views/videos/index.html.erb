@@ -9,7 +9,8 @@
       <th>File</th>
       <th>Progress</th>
       <th>Processing</th>
-      <th>Duration</th>
+      <th>Duration, Sec</th>
+      <th>Created At</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,10 +19,11 @@
     <% @videos.each do |video| %>
       <tr>
         <td><%= video.title %></td>
-        <td><%= image_tag(video.file.url(:thumb)) if video.file.url(:thumb).present? %></td>
+        <td><%= image_tag(video.file.url(:thumb), width: "200") if video.file.url(:thumb).present? %></td>
         <td><%= (video.progress.to_f * 100).round %>%</td>
         <td><%= video.file_processing? ? "Yes" : "No" %></td>
         <td><%= video.file_duration %></td>
+        <td><%= video.created_at %></td>
         <td><%= link_to 'Show', video %></td>
         <td><%= link_to 'Edit', edit_video_path(video) %></td>
         <td><%= link_to 'Destroy', video, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -31,5 +33,7 @@
 </table>
 
 <br>
+
+<%= paginate @videos %>
 
 <%= link_to 'New Video', new_video_path, class: "waves-effect waves-light btn" %>

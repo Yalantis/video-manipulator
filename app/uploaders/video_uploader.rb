@@ -1,8 +1,8 @@
 class VideoUploader < CarrierWave::Uploader::Base
   include ::CarrierWave::Backgrounder::Delay
   include ::CarrierWave::Extensions::VideoDuration
-  include ::CarrierWave::Extensions::VideoThumbnailer
   include ::CarrierWave::Video
+  include ::CarrierWave::Video::Thumbnailer
 
   def extension_whitelist
     %w(mov mp4 3gp mkv webm m4v avi)
@@ -45,12 +45,7 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   version :thumb do
     process thumbnail: [
-      {
-        resolution: '200x200',
-        preserve_aspect_ratio: :width,
-        quality: 1,
-        format: "png"
-      }
+      { format: 'png', quality: 10, size: 200, seek: '50%', logger: Rails.logger }
     ]
 
     def full_filename(for_file)
