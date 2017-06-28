@@ -1,7 +1,8 @@
 class Video
   include Mongoid::Document
   include Mongoid::Timestamps
-  include GlobalID::Identification # http://guides.rubyonrails.org/active_job_basics.html#globalid include Mongoid::Document
+  include GlobalID::Identification
+
   field :title, type: String
   field :file, type: String
   field :file_tmp, type: String
@@ -9,7 +10,7 @@ class Video
   field :file_duration, type: Integer
   field :progress, type: Float
 
-  field :apply_sepia_effect, type: Boolean
+  field :effect, type: String
 
   mount_uploader :file, ::VideoUploader
   process_in_background :file
@@ -20,8 +21,12 @@ class Video
 
   # This is not good idea to let this thing update database field many times
   # It is made just to test how it works
-  def processing_progress(format, format_options, progress)
-    self.update_attribute(:progress, progress.to_f)
+  def processing_progress(format, format_options, new_progress)
+    # Update this value only each 10th percent
+    diff = (new_progress.to_f - self.progress.to_f)
+    if diff >= 0.1 || (new_progress.to_i == 1)
+      self.update_attribute(:progress, new_progress.to_f)
+    end
   end
 
 end

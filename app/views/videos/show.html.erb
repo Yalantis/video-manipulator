@@ -8,24 +8,22 @@
 </p>
 
 <p>
-  <strong>Original Video File:</strong>
+  <strong>Video File:</strong>
   <%= video_tag(@video.file.url, controls: true) if @video.file.url.present? %>
 </p>
 
 <p>
-  <strong>Resized and Converted Video File:</strong>
-  <%= video_tag(@video.file.url(:processed), controls: true) if @video.file.url(:processed).present? %>
-</p>
-
-<p>
-  <strong>Apply Sepia Effect:</strong>
-  <%= @video.apply_sepia_effect? ? "Yes" : "No" %>
+  <strong>Effect:</strong>
+  <%= @video.effect %>
 </p>
 
 <p>
   <strong>File processing progress:</strong>
-  <%= (@video.progress.to_f * 100).round %>%
+  <div class="progress">
+      <div class="determinate" style="width: <%= (@video.progress.to_f * 100).round %>%"></div>
+  </div>
 </p>
+
 
 <p>
   <strong>File processing:</strong>

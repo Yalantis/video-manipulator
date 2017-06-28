@@ -32,8 +32,12 @@
 
   <div class="row">
     <div class="input-field">
-      <%= f.check_box :apply_sepia_effect, id: 'apply_sepia_effect' %>
-      <%= f.label :apply_sepia_effect, id: 'apply_sepia_effect', for:"apply_sepia_effect"%>
+      <%= f.radio_button :effect, 'no_effect', id: 'no_effect', checked: true %>
+      <%= f.label :no_effect, for: 'no_effect' %>
+      <%= f.radio_button :effect,'sepia', id: 'sepia_effect' %>
+      <%= f.label :sepia, for: 'sepia_effect' %>
+      <%= f.radio_button :effect, 'black_and_white', id: 'black_and_white_effect' %>
+      <%= f.label :black_and_white, for: 'black_and_white_effect' %>
     </div>
   </div>
 

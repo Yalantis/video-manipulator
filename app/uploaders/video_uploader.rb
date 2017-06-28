@@ -10,27 +10,35 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   PROCESSED_DEFAULTS = {
     resolution:           '500x400',
-    video_codec:          'libx264',
-    reference_frames:     '4',
-    constant_rate_factor: '30',
-    frame_rate:           '25',
-    x264_vprofile_level:  '3',
-    audio_codec:          'aac',
-    audio_bitrate:        '64k',
-    audio_sample_rate:    '44100',
-    audio_channels:       '1',
-    strict:               true,
+    # video_codec:          'libx264',
+    # reference_frames:     '4',
+    # constant_rate_factor: '30',
+    # frame_rate:           '25',
+    # x264_vprofile_level:  '3',
+    # audio_codec:          'aac',
+    # audio_bitrate:        '64k',
+    # audio_sample_rate:    '44100',
+    # audio_channels:       '1',
+    # strict:               true,
     progress: :processing_progress
-  }
+  }.freeze
 
-  version :processed do |model|
-    process encode: [:mp4, PROCESSED_DEFAULTS]
-  end
+  SEPIA_EFFECT_PARAMS =
+    %w(-filter_complex colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131 -c:a copy).freeze
+  BLACK_AND_WHITE_EFFECT_PARAMS =
+    %w(-vf hue=s=0 -c:a copy).freeze
+
+  process encode: [:mp4, PROCESSED_DEFAULTS]
+
 
   def encode(format, opts={})
     encode_video(format, opts) do |_, params|
-      if model.apply_sepia_effect
-        params[:custom] = %w(-filter_complex colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131 -c:a copy)
+      params[:custom] ||= []
+      case model.effect
+      when "sepia"
+        params[:custom] += SEPIA_EFFECT_PARAMS
+      when "black_and_white"
+        params[:custom] += BLACK_AND_WHITE_EFFECT_PARAMS
       end
     end
   end
