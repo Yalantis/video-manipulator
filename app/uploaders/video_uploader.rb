@@ -53,16 +53,16 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   def encode(format, opts={})
     # Normalize file format
-    encode_video(format, opts)
+    encode_video(format, opts.merge(processing_step: 'normalize'))
     # Apply effects
     if model.effect != 'no_effect'
-      encode_video(format, ADDITIONAL_OPTIONS) do |_, params|
+      encode_video(format, ADDITIONAL_OPTIONS.merge(processing_step: 'apply_effect')) do |_, params|
         params[:custom] = EFFECT_PARAMS[model.effect.to_sym]
       end
     end
     # Apply watermark
     if model.watermark_image.path.present?
-      encode_video(format, ADDITIONAL_OPTIONS) do |_, params|
+      encode_video(format, ADDITIONAL_OPTIONS.merge(processing_step: 'apply_watermark')) do |_, params|
         params[:watermark] ||= {}
         params[:watermark][:path] = model.watermark_image.path
       end
