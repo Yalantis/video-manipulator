@@ -13,8 +13,8 @@
 </p>
 
 <p>
-  <strong>Effect:</strong>
-  <%= @video.effect.to_s.humanize %>
+  <strong>Effects:</strong>
+  <%= @video.effects.map { |e| e.to_s.humanize }.join(', ') %>
 </p>
 
 <p>
