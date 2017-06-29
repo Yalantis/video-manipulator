@@ -19,8 +19,7 @@ class Video
   mount_uploader :watermark_image, ::ImageUploader
 
   validates :title, presence: true
-  ALLOWED_EFFECTS = %w(no_effect sepia black_and_white vertigo vignette sobel pixelizor invertor rgbnoise).freeze
-  validates :effect, inclusion: { in: ALLOWED_EFFECTS }
+  validates :effect, inclusion: { in: ::VideoUploader::ALLOWED_EFFECTS }
 
   # This is not good idea to let this thing update database field many times
   # It is made just to test how it works

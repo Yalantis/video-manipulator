@@ -13,8 +13,7 @@
 
   <div class="row">
     <div class="input-field">
-      <%= f.label :title %>
-      <%= f.text_field :title %>
+      <%= f.text_field :title, placeholder: 'Title' %>
     </div>
   </div>
 
@@ -33,9 +32,10 @@
   <div class="row">
     <span>Effects</span>
     <div class="input-field">
-      <% Video::ALLOWED_EFFECTS.each_with_index do |effect, index| %>
+      <% ::VideoUploader::ALLOWED_EFFECTS.each do |effect| %>
         <p>
-          <%= f.radio_button :effect, effect, id: effect, checked: index.zero? %>
+          <% checked = [f.object.effect, 'no_effect'].include?(effect) %>
+          <%= f.radio_button :effect, effect, id: effect, checked: checked %>
           <%= f.label effect, for: effect %>
         </p>
       <% end %>
@@ -48,7 +48,6 @@
         <span>Watermark Image</span>
         <%= f.file_field :watermark_image %>
       </div>
-      <span>Would not be applied if any above filters are selected</span>
       <div class="file-path-wrapper">
         <input class="file-path validate" type="text">
       </div>
