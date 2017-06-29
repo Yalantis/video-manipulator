@@ -61,8 +61,9 @@ class VideoUploader < CarrierWave::Uploader::Base
   def encode(format, opts={})
     # Normalize file format
     encode_video(format, opts.merge(processing_metadata: { step: 'normalize' }))
+    # Apply effects
     ordered_effects.each do |effect|
-      encode_video(format, ADDITIONAL_OPTIONS.merge(processing_metadata: {step: 'apply_effect', effect: effect })) do |_, params|
+      encode_video(format, ADDITIONAL_OPTIONS.merge(processing_metadata: { step: "apply_#{effect}_effect" })) do |_, params|
         params[:custom] = EFFECT_PARAMS[effect.to_sym]
       end
     end
