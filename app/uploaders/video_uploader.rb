@@ -30,7 +30,7 @@ class VideoUploader < CarrierWave::Uploader::Base
     progress: :processing_progress
   }
 
-  EFFECT_PARAMS = {
+  VIDEO_EFFECTS = {
     sepia:
       %w(-filter_complex colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131 -c:a copy),
     black_and_white: %w(-vf hue=s=0 -c:a copy),
@@ -43,11 +43,16 @@ class VideoUploader < CarrierWave::Uploader::Base
     reverse: %w(-vf reverse -af areverse),
     slow_down: %w(-filter:v setpts=2.0*PTS -filter:a atempo=0.5),
     speed_up: %w(-filter:v setpts=0.5*PTS -filter:a atempo=2.0),
+  }.freeze
+
+  AUDIO_EFFECTS = {
     echo: %w(-map 0 -c:v copy -af aecho=0.8:0.9:1000|500|500:0.7|0.5|0.3),
     tremolo: %w(-map 0 -c:v copy -af tremolo=f=10.0:d=0.7),
     vibrato: %w(-map 0 -c:v copy -af vibrato=f=7.0:d=0.5),
     chorus: %w(-map 0 -c:v copy -af chorus=0.5:0.9:50|60|40:0.4|0.32|0.3:0.25|0.4|0.3:2|2.3|1.3)
-  }.freeze
+  }
+
+  EFFECT_PARAMS = (VIDEO_EFFECTS.merge(AUDIO_EFFECTS)).freeze
 
   ALLOWED_EFFECTS = EFFECT_PARAMS.keys.map(&:to_s).freeze
 
@@ -56,8 +61,7 @@ class VideoUploader < CarrierWave::Uploader::Base
   def encode(format, opts={})
     # Normalize file format
     encode_video(format, opts.merge(processing_metadata: { step: 'normalize' }))
-    # Apply effects
-    model.effects.each do |effect|
+    ordered_effects.each do |effect|
       encode_video(format, ADDITIONAL_OPTIONS.merge(processing_metadata: {step: 'apply_effect', effect: effect })) do |_, params|
         params[:custom] = EFFECT_PARAMS[effect.to_sym]
       end
@@ -95,5 +99,18 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   def set_content_type_png(*args)
     self.file.instance_variable_set(:@content_type, "image/png")
+  end
+
+  def audio_effects
+    model.effects & AUDIO_EFFECTS.keys.map(&:to_s)
+  end
+
+  def video_effects
+    model.effects & VIDEO_EFFECTS.keys.map(&:to_s)
+  end
+
+  def ordered_effects
+    # Audio effects should be applied first since there might be conflict with some video effects
+    audio_effects + video_effects
   end
 end
