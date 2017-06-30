@@ -1,0 +1,69 @@
+<div id="video_info">
+  <p id="notice"><%= notice %></p>
+
+  <h1 class="header center orange-text">Video <%= video.id %></h1>
+
+  <p>
+    <strong>Title:</strong>
+    <%= video.title %>
+  </p>
+
+  <p>
+    <strong>Video File:</strong><br/>
+    <%= video_tag(video.file.url, controls: true) if video.file.url.present? %>
+  </p>
+
+  <p>
+    <strong>Effects:</strong>
+    <%= video.effects.map { |e| e.to_s.humanize }.join(', ') %>
+  </p>
+
+  <%= render partial: 'videos/progress', locals: { video: video } %>
+
+  <p>
+    <strong>File processing:</strong>
+    <%= video.file_processing? ? "Yes" : "No" %>
+  </p>
+
+  <p>
+    <strong>Duration:</strong>
+    <%= "#{video.file_duration} Seconds" if video.file_duration %>
+  </p>
+
+  <p>
+    <strong>Needs thumbnails:</strong>
+    <%= video.needs_thumbnails? ? "Yes" : "No" %>
+  </p>
+
+  <% if video.thumbnails.count.positive? %>
+    <p>
+      <strong>Thumbnails:</strong>
+      <div class="carousel">
+        <% video.thumbnails.each do |thumbnail| %>
+          <div class="carousel-item">
+            <%= image_tag(thumbnail.file.url) %>
+          </div>
+        <% end %>
+      </div>
+    </p>
+  <% end %>
+
+  <p>
+    <strong>Metadata:</strong>
+  <pre>
+    <%= JSON.pretty_generate(video.metadata) unless video.metadata.empty? %>
+  </pre>
+  </p>
+
+  <%= link_to 'Edit', edit_video_path(video) %> |
+  <%= link_to 'Back', videos_path %>
+
+  <% if video.thumbnails.count.positive? %>
+    <script>
+       $(document).ready(function () {
+           $('.carousel').carousel({});
+       });
+    </script>
+  <% end %>
+
+</div>

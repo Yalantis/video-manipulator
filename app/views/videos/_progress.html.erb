@@ -1,0 +1,17 @@
+<div id="video_progress">
+  <p>
+    <strong>File processing progress:</strong>
+    <div class="progress">
+        <div class="determinate" style="width: <%= (video.progress.to_f * 100).round %>%"></div>
+    </div>
+  </p>
+
+  <% video.processing_metadatas.each do |pm| %>
+    <p>
+      <strong><%= pm.step.humanize %> (<%= pm.format %>):</strong>
+      <div class="progress">
+          <div class="determinate" style="width: <%= (pm.progress.to_f * 100).round %>%"></div>
+      </div>
+    </p>
+  <% end %>
+</div>

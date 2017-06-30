@@ -57,10 +57,24 @@ class ProgressCalculator
   end
 
   def notify_about_progress
-    # TODO: Add ActionCable websocket notifications here
+    ::ActionCable.server.broadcast(
+      "notifications_channel",
+      progress_payload
+    )
   end
 
-  def notify_complete
-    # TODO: Add ActionCable websocket notifications here
+  def progress_payload
+    # INFO: This is made for simplicty
+    #       But in real application it is better to send
+    #       JSON data via action cable only and process all styling and markup
+    #       at fronend side
+    {
+      html: ApplicationController.renderer.render(
+        locals: { video: video },
+        partial: 'videos/progress'
+      ),
+      file_processing: video.file_processing?
+    }
+
   end
 end
