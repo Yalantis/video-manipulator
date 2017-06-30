@@ -43,5 +43,12 @@
   <%= "#{@video.file_duration} Seconds" if @video.file_duration %>
 </p>
 
+<p>
+  <strong>Metadata:</strong>
+<pre>
+  <%= JSON.pretty_generate(@video.metadata) unless @video.metadata.empty? %>
+</pre>
+</p>
+
 <%= link_to 'Edit', edit_video_path(@video) %> |
 <%= link_to 'Back', videos_path %>

@@ -13,6 +13,8 @@ class Video
 
   field :effects, type: Array, default: []
 
+  field :metadata, type: Hash, default: {}
+
   mount_uploader :file, ::VideoUploader
   process_in_background :file
   store_in_background :file
@@ -27,6 +29,13 @@ class Video
   # It is made just to test how it works
   def processing_progress(format, format_options, new_progress)
     ProgressCalculator.new(self, format, format_options, new_progress).update!
+  end
+
+  def save_metadata(new_metadata)
+    self.set(
+      metadata: new_metadata,
+      file_duration: new_metadata[:format][:duration]
+    )
   end
 
   private
