@@ -8,7 +8,7 @@
 </p>
 
 <p>
-  <strong>Video File:</strong>
+  <strong>Video File:</strong><br/>
   <%= video_tag(@video.file.url, controls: true) if @video.file.url.present? %>
 </p>
 
@@ -43,14 +43,22 @@
   <%= "#{@video.file_duration} Seconds" if @video.file_duration %>
 </p>
 
+<p>
+  <strong>Needs thumbnails:</strong>
+  <%= @video.needs_thumbnails? ? "Yes" : "No" %>
+</p>
+
 <% if @video.thumbnails.count.positive? %>
-  <div class="carousel">
-    <% @video.thumbnails.each_with_index do |thumbnail, index| %>
-      <div class="carousel-item">
-        <%= image_tag(thumbnail.file.url, width: "200")  %>
-      </div>
-    <% end %>
-  </div>
+  <p>
+    <strong>Thumbnails:</strong>
+    <div class="carousel">
+      <% @video.thumbnails.each do |thumbnail| %>
+        <div class="carousel-item">
+          <%= image_tag(thumbnail.file.url) %>
+        </div>
+      <% end %>
+    </div>
+  </p>
 <% end %>
 
 <p>
