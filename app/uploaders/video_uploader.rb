@@ -62,6 +62,8 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   process encode: [:mp4, PROCESSED_DEFAULTS.merge(ADDITIONAL_OPTIONS)]
 
+  OBLIGATORY_STEPS = ['normalize', 'read_video_metadata']
+
   def encode(format, opts={})
     # Normalize file format
     encode_video(format, opts.merge(processing_metadata: { step: 'normalize' }))

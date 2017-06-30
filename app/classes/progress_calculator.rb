@@ -45,8 +45,8 @@ class ProgressCalculator
     # Normalize step + 1
     # Effects steps + effects.count
     # Watermark step + 1
-    # Obtain video metadata step + 1
-    count = 2 + video.effects.count
+    # Read video metadata step + 1
+    count = ::VideoUploader::OBLIGATORY_STEPS.count + video.effects.count
     count += 1 if video.watermark_image.path.present?
     count
   end
