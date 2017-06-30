@@ -3,6 +3,8 @@ class Video
   include Mongoid::Timestamps
   include GlobalID::Identification
 
+  embeds_many :thumbnails
+
   embeds_many :processing_metadatas
 
   field :title, type: String
@@ -10,6 +12,7 @@ class Video
   field :file_processing, type: Boolean
   field :file_duration, type: Integer
   field :progress, type: Float, default: 0
+  field :needs_thumbnails, type: Boolean, default: false
 
   field :effects, type: Array, default: []
 
@@ -36,6 +39,14 @@ class Video
       metadata: new_metadata,
       file_duration: new_metadata[:format][:duration]
     )
+  end
+
+  def save_thumbnail_files(files_list)
+    files_list.each do |file_path|
+      ::File.open(file_path, 'r') do |f|
+        self.thumbnails.create(file: f)
+      end
+    end
   end
 
   private

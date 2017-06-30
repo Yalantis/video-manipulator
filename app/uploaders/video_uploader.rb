@@ -3,6 +3,7 @@ class VideoUploader < CarrierWave::Uploader::Base
   include ::CarrierWave::Extensions::VideoMetadata
   include ::CarrierWave::Video
   include ::CarrierWave::Video::Thumbnailer
+  include ::CarrierWave::Extensions::VideoMultiThumbnailer
 
   def extension_whitelist
     %w(mov mp4 3gp mkv webm m4v avi)
@@ -93,6 +94,19 @@ class VideoUploader < CarrierWave::Uploader::Base
         processing_metadata: {step: 'read_video_metadata' }
       })
     )
+
+    if model.needs_thumbnails?
+      # create thumbnails
+      create_thumbnails_for_video(
+        format,
+        ADDITIONAL_OPTIONS.merge({
+          save_thumbnail_files_method: :save_thumbnail_files,
+          resolution: '200x200',
+          vframes: model.file_duration, frame_rate: '1', # create thumb for each second of the video
+          processing_metadata: { step: 'create_video_thumbnails' }
+        })
+      )
+    end
   end
 
   version :thumb do

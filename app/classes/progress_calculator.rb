@@ -48,6 +48,7 @@ class ProgressCalculator
     # Read video metadata step + 1
     count = ::VideoUploader::OBLIGATORY_STEPS.count + video.effects.count
     count += 1 if video.watermark_image.path.present?
+    count += 1 if video.needs_thumbnails?
     count
   end
 
