@@ -98,10 +98,10 @@ class VideoUploader < CarrierWave::Uploader::Base
     if model.needs_thumbnails?
       # create thumbnails
       create_thumbnails_for_video(
-        format,
+        'jpg',
         ADDITIONAL_OPTIONS.merge({
           save_thumbnail_files_method: :save_thumbnail_files,
-          resolution: '200x200',
+          resolution: '300x300',
           vframes: model.file_duration, frame_rate: '1', # create thumb for each second of the video
           processing_metadata: { step: 'create_video_thumbnails' }
         })

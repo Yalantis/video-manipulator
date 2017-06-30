@@ -43,6 +43,16 @@
   <%= "#{@video.file_duration} Seconds" if @video.file_duration %>
 </p>
 
+<% if @video.thumbnails.count.positive? %>
+  <div class="carousel">
+    <% @video.thumbnails.each_with_index do |thumbnail, index| %>
+      <div class="carousel-item">
+        <%= image_tag(thumbnail.file.url, width: "200")  %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
 <p>
   <strong>Metadata:</strong>
 <pre>
@@ -52,3 +62,11 @@
 
 <%= link_to 'Edit', edit_video_path(@video) %> |
 <%= link_to 'Back', videos_path %>
+
+<% if @video.thumbnails.count.positive? %>
+  <script>
+     $(document).ready(function () {
+         $('.carousel').carousel({});
+     });
+  </script>
+<% end %>

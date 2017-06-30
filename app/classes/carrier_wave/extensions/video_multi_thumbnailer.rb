@@ -1,12 +1,13 @@
 module CarrierWave::Extensions::VideoMultiThumbnailer
 
-  THUMBNAIL_FORMAT = 'jpg'
-
   def create_thumbnails_for_video(format, opts = {})
     # move upload to local cache
     cache_stored_file! unless cached?
 
-    @options = CarrierWave::Video::FfmpegOptions.new(format, opts)
+    @options = CarrierWave::Video::FfmpegOptions.new(
+      format,
+      opts.merge(custom: []) # This is needed to avoid error at CarrierWave::Video::FfmpegOptions#format_params
+    )
     tmp_path = File.join(File.dirname(current_path), "tmpfile.#{format}")
     file = ::FFMPEG::Movie.new(current_path)
 
@@ -56,7 +57,9 @@ module CarrierWave::Extensions::VideoMultiThumbnailer
   end
 
   def thumb_file_paths_list
-    Dir["#{tmp_dir_path}/*.#{THUMBNAIL_FORMAT}"].sort
+    Dir["#{tmp_dir_path}/*.#{@options.format}"].sort_by do |filename|
+      File.mtime(filename)
+    end
   end
 
   def save_thumb_files
@@ -65,7 +68,7 @@ module CarrierWave::Extensions::VideoMultiThumbnailer
 
   def screenshot_options
     [
-      "#{tmp_dir_path}/%d.#{THUMBNAIL_FORMAT}",
+      "#{tmp_dir_path}/%d.#{@options.format}",
       @options.format_params,
       {
         preserve_aspect_ratio: :width,
