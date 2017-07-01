@@ -67,7 +67,14 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   def encode(format, opts={})
     # Normalize file format
-    encode_video(format, opts.merge(processing_metadata: { step: 'normalize' }))
+    encode_video(format, opts.merge(
+      processing_metadata: { step: 'normalize' },
+      callbacks: {
+        # Clean previous progress data if encoding happens for existing video record
+        # Callback method at model
+        before_transcode: :processing_init_callback
+      }
+    ))
     # Apply effects
     ordered_effects.each do |effect|
       encode_video(format, ADDITIONAL_OPTIONS.merge(
@@ -86,6 +93,7 @@ class VideoUploader < CarrierWave::Uploader::Base
         params[:watermark][:path] = model.watermark_image.path
       end
     end
+
     # Read video metadata
     read_video_metadata(
       format,
@@ -116,10 +124,6 @@ class VideoUploader < CarrierWave::Uploader::Base
 
     def full_filename(for_file)
       png_name for_file, version_name
-    end
-
-    def full_filename(for_file)
-      %(#{version_name}_#{for_file.chomp(File.extname(for_file))}.jpg)
     end
 
     # INFO Solution details

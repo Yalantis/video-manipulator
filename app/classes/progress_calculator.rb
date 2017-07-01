@@ -73,8 +73,7 @@ class ProgressCalculator
         locals: { video: video },
         partial: 'videos/progress'
       ),
-      file_processing: video.file_processing?
+      processing_completed: false
     }
-
   end
 end

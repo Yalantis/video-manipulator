@@ -9,10 +9,8 @@ App.notifications = App.cable.subscriptions.create "NotificationsChannel",
 
   received: (data) ->
     # Called when there's incoming data on the websocket for this channel
-    $("#video_progress").replaceWith($(data['html']))
-    # console.log(data);
-    # if $(data['file_processing']) == true
-
-    # else
-      # location.reload();
-      # $("#video_info").replaceWith($(data))
+    if data['processing_completed'] == false
+      $("#video_progress").replaceWith($(data['html']))
+    else
+      # TODO: Use ajax for this purpose is would look more smoothly
+      location.reload()

@@ -20,7 +20,7 @@ class Video
 
   mount_uploader :file, ::VideoUploader
   process_in_background :file
-  store_in_background :file
+  store_in_background :file, ::VideoSaverWorker
   validates_presence_of :file
 
   mount_uploader :watermark_image, ::ImageUploader
@@ -35,7 +35,7 @@ class Video
   end
 
   def save_metadata(new_metadata)
-    self.set(
+    set(
       metadata: new_metadata,
       file_duration: new_metadata[:format][:duration]
     )
@@ -44,19 +44,37 @@ class Video
   def save_thumbnail_files(files_list)
     files_list.each do |file_path|
       ::File.open(file_path, 'r') do |f|
-        self.thumbnails.create(file: f)
+        thumbnails.create(file: f)
       end
     end
+  end
+
+  # before_transcode callback
+  # Callback method accepts format and raw options but we do not need them here
+  def processing_init_callback(_, _)
+    clean_datas
+  end
+
+  def processing_completed_callback
+    ::ActionCable.server.broadcast(
+      "notifications_channel",
+      processing_completed: true
+    )
   end
 
   private
 
   def effects_allowed_check
-    self.effects.each do |effect|
+    effects.each do |effect|
       unless ::VideoUploader::ALLOWED_EFFECTS.include?(effect)
-        self.errors.add(:effects, :not_allowed, effect: effect.humanize)
+        errors.add(:effects, :not_allowed, effect: effect.humanize)
       end
     end
+  end
+
+  def clean_datas
+    processing_metadatas.destroy_all
+    thumbnails.destroy_all
   end
 
 end
