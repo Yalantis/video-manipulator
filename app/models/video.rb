@@ -18,12 +18,17 @@ class Video
 
   field :metadata, type: Hash, default: {}
 
-  mount_uploader :file, ::VideoUploader
+  # mount_on is specified here because without it gem
+  # would name filename attribute as file_filename
+  # In some way it looks logical. But in our case it is strage to have
+  # file_filename attribute at database
+  mount_uploader :file, ::VideoUploader, mount_on: :file
   process_in_background :file
   store_in_background :file, ::VideoSaverWorker
   validates_presence_of :file
 
-  mount_uploader :watermark_image, ::ImageUploader
+  # The same as above. We do not want to have watermark_image_filename attribute
+  mount_uploader :watermark_image, ::ImageUploader, mount_on: :watermark_image
 
   validates :title, presence: true
   validate :effects_allowed_check

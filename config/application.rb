@@ -24,5 +24,7 @@ module VideoManipulator
 
     # Use sidekiq as activejob backend
     config.active_job.queue_adapter = :sidekiq
+
+    config.autoload_paths << "#{Rails.root}/app/workers"
   end
 end
