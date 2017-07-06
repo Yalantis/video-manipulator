@@ -1,8 +1,13 @@
 class VideoUploader < CarrierWave::Uploader::Base
+  # Store and process video in the background
   include ::CarrierWave::Backgrounder::Delay
+  # This is custom extension for video metadata extraction
   include ::CarrierWave::Extensions::VideoMetadata
+  # Use carrierwave-video gem's methods here
   include ::CarrierWave::Video
+  # Use carrierwave-video-thumbnailer gem's methodds here
   include ::CarrierWave::Video::Thumbnailer
+  # This is custom extension for video thumbnails creation
   include ::CarrierWave::Extensions::VideoMultiThumbnailer
 
   def extension_whitelist
@@ -61,7 +66,11 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   ALLOWED_EFFECTS = EFFECT_PARAMS.keys.map(&:to_s).freeze
 
+  # Processing is forced ower original file so when processing is finished,
+  # processed file would replace orignal one. This one line of enforces this:
   process encode: [:mp4, PROCESSED_DEFAULTS.merge(ADDITIONAL_OPTIONS)]
+  # We just do not need original file. And also this would ensure that
+  # Thumbnail would be generated from processed file
 
   OBLIGATORY_STEPS = ['normalize', 'read_video_metadata']
 
@@ -87,7 +96,7 @@ class VideoUploader < CarrierWave::Uploader::Base
     if model.watermark_image.path.present?
       encode_video(
         format,
-        ADDITIONAL_OPTIONS.merge(processing_metadata: {step: 'apply_watermark' })
+        ADDITIONAL_OPTIONS.merge(processing_metadata: { step: 'apply_watermark' })
       ) do |_, params|
         params[:watermark] ||= {}
         params[:watermark][:path] = model.watermark_image.path
@@ -99,7 +108,7 @@ class VideoUploader < CarrierWave::Uploader::Base
       format,
       ADDITIONAL_OPTIONS.merge({
         save_metadata_method: :save_metadata,
-        processing_metadata: {step: 'read_video_metadata' }
+        processing_metadata: { step: 'read_video_metadata' }
       })
     )
 
@@ -117,6 +126,8 @@ class VideoUploader < CarrierWave::Uploader::Base
     end
   end
 
+  # Generate one thumbnail from middle (50%) of the file
+  # With carrierwave-video-thumbnailer gem
   version :thumb do
     process thumbnail: [
       { format: 'png', quality: 10, size: 200, seek: '50%', logger: Rails.logger }
@@ -126,7 +137,8 @@ class VideoUploader < CarrierWave::Uploader::Base
       png_name for_file, version_name
     end
 
-    # INFO Solution details
+    # INFO: This is needed to set proper file content type
+    # Solution details
     # https://github.com/evrone/carrierwave-video-thumbnailer/issues/6#issuecomment-28664696
     process :set_content_type_png
   end
@@ -136,7 +148,7 @@ class VideoUploader < CarrierWave::Uploader::Base
   end
 
   def set_content_type_png(*args)
-    self.file.instance_variable_set(:@content_type, "image/png")
+    self.file.instance_variable_set(:@content_type, 'image/png')
   end
 
   def audio_effects
@@ -148,7 +160,9 @@ class VideoUploader < CarrierWave::Uploader::Base
   end
 
   def ordered_effects
-    # Audio effects should be applied first since there might be conflict with some video effects
+    # Audio effects should be applied first
+    # since there might be conflict with some video effects
+    # (At least with effect that speeds up or slows down video along with audio)
     audio_effects + video_effects
   end
 end

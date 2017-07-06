@@ -3,5 +3,7 @@ class Thumbnail
 
   embedded_in :video
 
+  # Here background uploading is not used since this entity would be created in
+  # background already
   mount_uploader :file, ::ImageUploader
 end
