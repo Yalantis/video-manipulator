@@ -23,6 +23,7 @@ module CarrierWave::Extensions::VideoMultiThumbnailer
 
     progress = @options.progress(model)
 
+    # Create temprorary directory where all created thumbnails would be saved
     prepare_tmp_dir
 
     with_trancoding_callbacks do
@@ -38,14 +39,20 @@ module CarrierWave::Extensions::VideoMultiThumbnailer
       end
     end
 
+    # Run callback for saving thumbnails
     save_thumb_files
+    # Remove temporary data
     remove_tmp_dir
   end
 
   private
 
+  def base_tmp_dir_path
+    "#{::Rails.root}/tmp/videos/#{model.id.to_s}"
+  end
+
   def tmp_dir_path
-    "#{::Rails.root}/tmp/videos/#{model.id.to_s}/thumbnails"
+    "#{base_tmp_dir_path}/thumbnails"
   end
 
   def prepare_tmp_dir
@@ -53,9 +60,11 @@ module CarrierWave::Extensions::VideoMultiThumbnailer
   end
 
   def remove_tmp_dir
-    FileUtils.rm_rf(tmp_dir_path) if Dir.exists?(tmp_dir_path)
+    FileUtils.rm_rf(base_tmp_dir_path) if Dir.exists?(base_tmp_dir_path)
   end
 
+  # Thumbnails are sorted by their creation date
+  # to align then in chronological order.
   def thumb_file_paths_list
     Dir["#{tmp_dir_path}/*.#{@options.format}"].sort_by do |filename|
       File.mtime(filename)

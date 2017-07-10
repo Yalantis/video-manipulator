@@ -41,11 +41,11 @@ class ProgressCalculator
   end
 
   def steps_count
-    # TODO: These step counts should be calculated at video uploader side
     # Normalize step + 1
     # Effects steps + effects.count
     # Watermark step + 1
     # Read video metadata step + 1
+    # Generate thumbnails step + 1
     count = ::VideoUploader::OBLIGATORY_STEPS.count + video.effects.count
     count += 1 if video.watermark_image.path.present?
     count += 1 if video.needs_thumbnails?
