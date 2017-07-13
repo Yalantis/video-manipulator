@@ -27,12 +27,8 @@ class VideoUploader < CarrierWave::Uploader::Base
     audio_bitrate:        '64k',
     audio_sample_rate:    '44100',
     audio_channels:       '1',
-    strict:               true
-  }.freeze
-
-  ADDITIONAL_OPTIONS = {
     progress: :processing_progress
-  }
+  }.freeze
 
   VIDEO_EFFECTS = {
     sepia:
@@ -66,7 +62,7 @@ class VideoUploader < CarrierWave::Uploader::Base
 
   # Processing is forced ower original file so when processing is finished,
   # processed file would replace orignal one. This one line of enforces this:
-  process encode: [:mp4, PROCESSED_DEFAULTS.merge(ADDITIONAL_OPTIONS)]
+  process encode: [:mp4, PROCESSED_DEFAULTS]
   # We just do not need original file. And also this would ensure that
   # Thumbnail would be generated from processed file
 
@@ -84,7 +80,7 @@ class VideoUploader < CarrierWave::Uploader::Base
     ))
     # Apply effects
     ordered_effects.each do |effect|
-      encode_video(format, ADDITIONAL_OPTIONS.merge(
+      encode_video(format, opts.merge(
         processing_metadata: { step: "apply_#{effect}_effect" }
       )) do |_, params|
         params[:custom] = EFFECT_PARAMS[effect.to_sym]
@@ -94,7 +90,7 @@ class VideoUploader < CarrierWave::Uploader::Base
     if model.watermark_image.path.present?
       encode_video(
         format,
-        ADDITIONAL_OPTIONS.merge(processing_metadata: { step: 'apply_watermark' })
+        opts.merge(processing_metadata: { step: 'apply_watermark' })
       ) do |_, params|
         params[:watermark] ||= {}
         params[:watermark][:path] = model.watermark_image.path
@@ -104,7 +100,7 @@ class VideoUploader < CarrierWave::Uploader::Base
     # Read video metadata
     read_video_metadata(
       format,
-      ADDITIONAL_OPTIONS.merge({
+      opts.merge({
         save_metadata_method: :save_metadata,
         processing_metadata: { step: 'read_video_metadata' }
       })
@@ -114,12 +110,13 @@ class VideoUploader < CarrierWave::Uploader::Base
       # create thumbnails
       create_thumbnails_for_video(
         'jpg',
-        ADDITIONAL_OPTIONS.merge({
+        {
+          progress: :processing_progress,
           save_thumbnail_files_method: :save_thumbnail_files,
           resolution: '300x300',
           vframes: model.file_duration, frame_rate: '1', # create thumb for each second of the video
           processing_metadata: { step: 'create_video_thumbnails' }
-        })
+        }
       )
     end
   end
