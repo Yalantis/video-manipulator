@@ -1,24 +1,15 @@
-# README
+# Video Manipulator app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project describes possibilities of standard gems for video processing at Ruby on Rails, plus some custom tweaks and hacks for fancy video effects.
 
-Things you may want to cover:
+For database in this project is used NoSQL database [MongoDB](https://www.mongodb.com/).
 
-* Ruby version
+Videos are processed in background with [sidekiq](https://github.com/mperham/sidekiq) gem.
 
-* System dependencies
+All video processing is happens with [FFmpeg](https://ffmpeg.org/) utility: some simple video effects and audio effects plus fancy video effects from [Frei0r](https://frei0r.dyne.org/) plugin.
 
-* Configuration
+For real time processing progress refresh project uses web socket nofications with rails' [Action Cable](http://edgeguides.rubyonrails.org/action_cable_overview.html).
 
-* Database creation
+For more details read corresponding article.
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+**TODO: Add article link to Yalantis website**
