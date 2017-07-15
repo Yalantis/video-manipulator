@@ -19,14 +19,14 @@ module CarrierWave
       def run_thumbnails_transcoding
         with_trancoding_callbacks do
           if @progress
-            @file.screenshot(*screenshot_options) do |value|
-              progress.call(value)
+            @movie.screenshot(*screenshot_options) do |value|
+              @progress.call(value)
             end
             # It is ugly hack but this operation returned this in the end
             # 0.8597883597883599 that is not 1.0
             @progress.call(1.0)
           else
-            @file.screenshot(*screenshot_options)
+            @movie.screenshot(*screenshot_options)
           end
         end
       end
@@ -41,13 +41,13 @@ module CarrierWave
           format, opts.merge(custom: [])
         )
 
-        @file = ::FFMPEG::Movie.new(current_path)
+        @movie = ::FFMPEG::Movie.new(current_path)
 
         if opts[:resolution] == :same
-          @options.format_options[:resolution] = @file.resolution
+          @options.format_options[:resolution] = @movie.resolution
         end
 
-        yield(@file, @options.format_options) if block_given?
+        yield(@movie, @options.format_options) if block_given?
 
         @progress = @options.progress(model)
       end

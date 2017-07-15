@@ -66,7 +66,7 @@ class Video
   def save_thumbnail_files(files_list)
     files_list.each do |file_path|
       ::File.open(file_path, 'r') do |f|
-        thumbnails.create(file: f)
+        thumbnails.create!(file: f)
       end
     end
   end
