@@ -79,7 +79,7 @@ class Video
 
   def processing_completed_callback
     ::ActionCable.server.broadcast(
-      "notifications_channel",
+      'notifications_channel',
       processing_completed: true
     )
   end
@@ -98,5 +98,4 @@ class Video
     processing_metadatas.destroy_all
     thumbnails.destroy_all
   end
-
 end

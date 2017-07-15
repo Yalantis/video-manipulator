@@ -1,5 +1,4 @@
 class ProgressCalculator
-
   attr_reader :video, :format, :format_options, :new_progress
 
   def initialize(video, format, format_options, new_progress)
@@ -10,16 +9,18 @@ class ProgressCalculator
   end
 
   def update!
-    if shoud_update?
-      # Had to use atomic set operation here since normal update
-      # has been setting file_processing to false while processing still was not finished
-      step_metadata.set(progress: new_progress.to_f)
-      video.set(progress: calculate_overall_progress.to_f)
-      notify_about_progress
-    end
+    update_progress_data if shoud_update?
   end
 
   private
+
+  def update_progress_data
+    # Had to use atomic set operation here since normal update
+    # has been setting file_processing to false while processing still was not finished
+    step_metadata.set(progress: new_progress.to_f)
+    video.set(progress: calculate_overall_progress.to_f)
+    notify_about_progress
+  end
 
   def step
     format_options[:processing_metadata][:step]
@@ -58,7 +59,7 @@ class ProgressCalculator
 
   def notify_about_progress
     ::ActionCable.server.broadcast(
-      "notifications_channel",
+      'notifications_channel',
       progress_payload
     )
   end

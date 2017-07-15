@@ -1,5 +1,4 @@
 class VideoSaverWorker < ::CarrierWave::Workers::StoreAsset
-
   def perform(*args)
     super(*args)
     run_video_processing_chain_completed_callbacks
