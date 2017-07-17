@@ -1,5 +1,7 @@
 # Video Manipulator app
 
+## General Information
+
 This project describes possibilities of standard gems for video processing at Ruby on Rails, plus some custom tweaks and hacks for fancy video effects.
 
 For database in this project is used NoSQL database [MongoDB](https://www.mongodb.com/).
@@ -13,3 +15,20 @@ For real time processing progress refresh project uses web socket nofications wi
 For more details read corresponding article.
 
 **TODO: Add article link to Yalantis website**
+
+## Project setup up
+
+Project depends on this software:
+
+1. Ruby Version Manager
+2. Ruby 2.3.0
+3. Rails 5.0.4
+3. MongoDB 3.2.10
+4. Redis 3.2.5
+5. FFmpeg 3.3.2
+6. Frei0r FFmpeg plugin 1.6.1
+
+## Project start up (developemnt environment)
+
+1. Start server with `rails s` command
+2. Start sidekiq with `bundle exec sidekiq -C config/sidekiq.yml` command
