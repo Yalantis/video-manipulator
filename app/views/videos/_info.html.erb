@@ -36,7 +36,7 @@
   </p>
 
   <% if video.thumbnails.count.positive? %>
-    <p>
+    <p id='thumbnails'>
       <strong>Thumbnails:</strong>
       <div class="carousel">
         <% video.thumbnails.each do |thumbnail| %>
@@ -57,13 +57,5 @@
 
   <%= link_to 'Edit', edit_video_path(video) %> |
   <%= link_to 'Back', videos_path %>
-
-  <% if video.thumbnails.count.positive? %>
-    <script>
-       $(document).ready(function () {
-           $('.carousel').carousel({});
-       });
-    </script>
-  <% end %>
 
 </div>

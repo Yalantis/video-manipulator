@@ -1,1 +1,9 @@
 <%= render partial: 'videos/info', locals: { video: @video } %>
+
+<% if @video.thumbnails.count.positive? %>
+  <script>
+     $(document).ready(function () {
+         $('.carousel').carousel({});
+     });
+  </script>
+<% end %>

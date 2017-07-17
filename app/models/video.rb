@@ -78,9 +78,19 @@ class Video
   end
 
   def processing_completed_callback
+    # INFO: This is made for simplicty
+    #       But in real application it is better to send
+    #       JSON data via action cable only and process all styling and markup
+    #       at fronend side
     ::ActionCable.server.broadcast(
       'notifications_channel',
-      processing_completed: true
+      {
+        html: ApplicationController.renderer.render(
+          locals: { video: self },
+          partial: 'videos/info'
+        ),
+        processing_completed: true
+      }
     )
   end
 

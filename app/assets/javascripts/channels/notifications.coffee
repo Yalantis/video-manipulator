@@ -12,5 +12,7 @@ App.notifications = App.cable.subscriptions.create "NotificationsChannel",
     if data['processing_completed'] == false
       $("#video_progress").replaceWith($(data['html']))
     else
-      # TODO: Use ajax for this purpose is would look more smoothly
-      location.reload()
+      $("#video_info").replaceWith($(data['html']))
+      if $('#thumbnails').length
+        # Init thumbnails carousel when they are present only
+        $('.carousel').carousel({})
