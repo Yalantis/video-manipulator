@@ -3,7 +3,7 @@ module CarrierWave
     module VideoMultiThumbnailer
       def create_thumbnails_for_video(format, opts = {})
         prepare_thumbnailing_parameters_by(format, opts)
-        # Create temprorary directory where all created thumbnails would be saved
+        # Create temporary directory where all created thumbnails would be saved
         prepare_tmp_dir
 
         run_thumbnails_transcoding

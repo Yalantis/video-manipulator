@@ -6,7 +6,7 @@ class Video
   # Since it is Mongoid::Document
   # we might need this for data processing at background jobs
   # https://github.com/rails/activemodel-globalid
-  # I allows model to be serialized / deserialized by uniqie identifier
+  # I allows model to be serialized / deserialized by unique identifier
   include GlobalID::Identification
 
   embeds_many :thumbnails

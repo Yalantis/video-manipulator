@@ -5,7 +5,7 @@ class VideoUploader < CarrierWave::Uploader::Base
   include ::CarrierWave::Extensions::VideoMetadata
   # Use carrierwave-video gem's methods here
   include ::CarrierWave::Video
-  # Use carrierwave-video-thumbnailer gem's methodds here
+  # Use carrierwave-video-thumbnailer gem's methods here
   include ::CarrierWave::Video::Thumbnailer
   # This is custom extension for video thumbnails creation
   include ::CarrierWave::Extensions::VideoMultiThumbnailer
@@ -21,7 +21,7 @@ class VideoUploader < CarrierWave::Uploader::Base
   end
 
   # Processing is forced ower original file so when processing is finished,
-  # processed file would replace orignal one. This one line of enforces this:
+  # processed file would replace original one. This one line of enforces this:
   process encode: [:mp4, PROCESSED_DEFAULTS]
   # We just do not need original file. And also this would ensure that
   # Thumbnail would be generated from processed file

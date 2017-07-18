@@ -7,7 +7,7 @@ module CableData
         # INFO: This is made for simplicity
         #       But in real application it is better to send
         #       JSON data via action cable only and process
-        #       all styling and markup at fronend side
+        #       all styling and markup at frontend side
         ApplicationController.renderer.render(
           locals: { video: object },
           partial: 'videos/info'
