@@ -7,7 +7,6 @@ module EncodingConstants
     audio_codec:          'aac',
     audio_bitrate:        '64k',
     audio_sample_rate:    '44100',
-    audio_channels:       '1',
     progress: :processing_progress
   }.freeze
 
