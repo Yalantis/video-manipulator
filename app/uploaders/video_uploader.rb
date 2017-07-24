@@ -21,7 +21,8 @@ class VideoUploader < CarrierWave::Uploader::Base
   end
 
   # Processing is forced ower original file so when processing is finished,
-  # processed file would replace original one. This one line of enforces this:
+  # processed file would replace original one.
+  # This one line of code enforces this:
   process encode: [:mp4, PROCESSED_DEFAULTS]
   # We just do not need original file. And also this would ensure that
   # Thumbnail would be generated from processed file

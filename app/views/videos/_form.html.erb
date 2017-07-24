@@ -31,12 +31,12 @@
 
   <div class="row">
     <span>Effects</span>
-      <% ::VideoUploader::ALLOWED_EFFECTS.each do |effect| %>
-        <div class="input-field">
-          <%= f.check_box :effects, {id: "effects_#{effect}", multiple: true, checked: f.object.effects.include?(effect) }, effect, nil %>
-          <%= f.label :effects, effect.humanize, id: "effects_#{effect}", for: "effects_#{effect}" %>
-        </div>
-      <% end %>
+    <% ::VideoUploader::ALLOWED_EFFECTS.each do |effect| %>
+      <div class="input-field">
+        <%= f.check_box :effects, {id: "effects_#{effect}", multiple: true, checked: f.object.effects.include?(effect) }, effect, nil %>
+        <%= f.label :effects, effect.humanize, id: "effects_#{effect}", for: "effects_#{effect}" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="row">

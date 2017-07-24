@@ -37,7 +37,7 @@ class Video
 
   # mount_on is specified here because without it gem
   # would name filename attribute as file_filename
-  # In some way it looks logical. But in our case it is strage to have
+  # In some way it looks logical. But in our case it is strange to have
   # file_filename attribute at database
   mount_uploader :file, ::VideoUploader, mount_on: :file
   process_in_background :file
