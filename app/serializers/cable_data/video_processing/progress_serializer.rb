@@ -1,6 +1,6 @@
 module CableData
   module VideoProcessing
-    class ProgressSerializer < ActiveModel::Serializer
+    class ProgressSerializer < BaseSerializer
       attributes :html, :processing_completed
 
       def html
